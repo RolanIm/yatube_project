@@ -161,3 +161,5 @@ cython_debug/
 README.md
 requirements.txt
 LICENSE
+.mypy_cache
+yatube_project/static/
