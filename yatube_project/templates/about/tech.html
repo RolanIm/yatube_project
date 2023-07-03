@@ -3,10 +3,10 @@
 {% block content %}
 {% comment %} Колонки с отступом сверху и снизу {% endcomment %}
 <div class="row">
-  <h1>Вот, что я умею</h1>
+  <h3>Вот, что я умею</h3>
   {% comment %}
     Боковой блок со списком технологий
-    Займет всю ширину блока на мобильном
+    займет всю ширину блока на мобильном
     и 25% при размерах экрана ≥768px
   {% endcomment %}
   <aside class="col-12 col-md-3">
@@ -18,17 +18,34 @@
         Django
       </li>
       <li class="list-group-item">
-        PostgreSQL
+        PostgresSQL, SQlite
+      </li>
+      <li class="list-group-item">
+        GIT
       </li>
     </ul>
   </aside>
   {% comment %}
     Статья
-    Займет всю ширину блока на мобильном
+    займет всю ширину блока на мобильном
     и 75% при размерах экрана ≥768px
   {% endcomment %}
   <article class="col-12 col-md-9">
-    <p>Эта страница оформлена с помощью bost и HTML/CSS</p>
+    <p style="text-indent: 25px;">
+        <ul>
+            <li>
+                <p>Backend часть написана с помощью python и Django</p>
+            </li>
+            <li>
+                <p>Эта страница оформлена с помощью bootstrap и HTML/CSS</p>
+            </li>
+            <li>
+                <p>Данные о постах пользователей хранятся в БД SQlite</p>
+            </li>
+            <li>
+                <p>Используются технологии git & Github</p>
+            </li>
+        </ul>
   </article>
 </div>
 {% endblock %}
