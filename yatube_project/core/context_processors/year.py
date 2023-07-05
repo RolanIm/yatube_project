@@ -1,2 +1,5 @@
+import datetime
+
+
 def year(request):
-    return request
+    return {'year': datetime.datetime.today().year}

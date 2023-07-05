@@ -1,15 +1,80 @@
-<!-- Использованы классы bootstrap для создания типовой навигации с логотипом -->
-<!-- В дальнейшем тут будет создано полноценное меню -->
 {% load static %}
-<nav class="navbar navbar-light" style="background-color: lightskyblue">
-  <div class="container">
-    <a class="navbar-brand" href="{% url 'posts:index' %}">
+  <nav class="navbar navbar-light navbar-expand-lg" style="background-color: lightskyblue">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'posts:index' %}">
       <img src="{% static 'img/logo.png' %}" width="40" height="40"
-           class="d-inline-block align-top" alt="">
-      <!-- тег span используется для добавления нужных стилей отдельным участкам текста -->
-        <span style="font-size:28px">
-            <span style="color:red">Ya</span>tube
-        </span>
-    </a>
-  </div>
-</nav>
+         class="d-inline-block align-top" alt="">
+      <span style="font-size:28px">
+          <span style="color:red">Ya</span>tube
+      </span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+      >
+          <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="nav nav-pills navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link {% if request.resolver_match.view_name == 'about:author' %}active{% endif %}"
+                 href="{% url 'about:author' %}">
+                  Об авторе
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.resolver_match.view_name == 'about:tech' %}active{% endif %}"
+                 href="{% url 'about:tech' %}"
+              >
+                  Технологии
+              </a>
+            </li>
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link"
+                     href="<!--  -->"
+                  >
+                      Новая запись
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link {% if request.resolver_match.view_name == 'users:password_change' %}active{% endif %}"
+                     href="{% url 'users:password_change' %}"
+                  >
+                      Изменить пароль
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link {% if request.resolver_match.view_name == 'users:logout' %}active{% endif %}"
+                     href="{% url 'users:logout' %}"
+                  >
+                      Выйти
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link {% if request.resolver_match.view_name == 'posts:profile' %}active{% endif %}"
+                     href="{% url 'posts:profile' user.username %}"
+                  >
+                    Пользователь: {{ user.username }}
+                  </a>
+                <li>
+            {% else %}
+                <li class="nav-item">
+                  <a class="nav-link {% if request.resolver_match.view_name == 'users:login' %}active{% endif %}"
+                     href="{% url 'users:login' %}"
+                  >
+                      Войти
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link {% if request.resolver_match.view_name == 'users:signup' %}active{% endif %}"
+                     href="{% url 'users:signup' %}"
+                  >
+                      Регистрация
+                  </a>
+                </li>
+            {% endif %}
+          </ul>
+      </div>
+    </div>
+  </nav>

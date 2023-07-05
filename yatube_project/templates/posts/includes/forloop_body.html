@@ -1,0 +1,22 @@
+{% for post in page_obj %}
+    <ul>
+        <li>Автор:
+            <a href="{% url 'posts:profile' post.author.username %}" class="text-decoration-none">
+                {{ post.author.get_full_name }}
+            </a>
+        </li>
+        <li>Дата публикации: {{ post.pub_date|date:"d M Y" }}</li>
+    </ul>
+    <p>{{ post.text }}</p>
+    <a href="{% url 'posts:post_id' post.pk %}" class="text-decoration-none">
+        подробная информация
+    </a>
+    {% if not post.group == None %}
+        <p>
+            <a href="{% url 'posts:group_posts' post.group.slug %}" class="text-decoration-none">
+                все записи группы
+            </a>
+        </p>
+    {% endif %}
+    {% if not forloop.last %}<hr>{% endif %}
+{% endfor %}
