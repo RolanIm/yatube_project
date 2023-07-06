@@ -7,7 +7,7 @@
         </li>
         <li>Дата публикации: {{ post.pub_date|date:"d M Y" }}</li>
     </ul>
-    <p>{{ post.text }}</p>
+    <p>{{ post.text|truncatewords:30 }}</p>
     <a href="{% url 'posts:post_id' post.pk %}" class="text-decoration-none">
         подробная информация
     </a>

@@ -1,13 +1,11 @@
 from django.contrib import admin
-
-# Из модуля models импортируем модель Post
 from .models import Post, Group
 
 
 class PostAdmin(admin.ModelAdmin):
     # Перечисляем поля, которые должны отображаться в админке
     list_display = ('pk', 'text', 'pub_date', 'author', 'group',)
-    # Позволяет менять/добавлять текс прям в таблице через интерфейс
+    # Позволяет менять/добавлять текст прям в таблице через интерфейс
     list_editable = ('group',)
     # Добавляем интерфейс для поиска по тексту постов
     search_fields = ('text',)
