@@ -11,7 +11,7 @@
     <a href="{% url 'posts:post_id' post.pk %}" class="text-decoration-none">
         подробная информация
     </a>
-    {% if not post.group == None %}
+    {% if post.group %}
         <p>
             <a href="{% url 'posts:group_posts' post.group.slug %}" class="text-decoration-none">
                 все записи группы
