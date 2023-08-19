@@ -21,7 +21,12 @@
             {% endif %}
           </div>
           <div class="card-body">
-            <form method="post" action="{% url 'posts:post_create' %}">
+            <form method="post"
+                    {% if is_edit %}
+                        action="{% url 'posts:post_edit' post.id %}">
+                    {% else %}
+                        action="{% url 'posts:post_create' %}">
+                    {% endif %}
               {% include 'includes/form.html' %}
               <button type="submit" class="btn btn-primary">
                 {% if is_edit %}

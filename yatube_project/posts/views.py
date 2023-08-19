@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
+
 from .models import Post, Group, User
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
@@ -20,7 +22,6 @@ def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
     all_posts = Post.objects.filter(group=group).order_by('-pub_date')
     page_obj, paginator = get_page_objects(request, posts=all_posts)
-    group = get_object_or_404(Group, slug=slug)
 
     context = {
         'group': group,
@@ -65,7 +66,7 @@ def post_create(request):
         post = form.save(commit=False)
         post.author = request.user
         post.save()
-        return redirect('posts:profile', post.author)
+        return redirect(reverse('posts:profile', args=[post.author.username]))
     context = {
         'form': form,
     }
@@ -74,17 +75,18 @@ def post_create(request):
 
 @login_required
 def post_edit(request, post_id):
-    form = PostForm(request.POST or None)
+    post = get_object_or_404(Post, pk=post_id, author=request.user)
+    form = PostForm(request.POST or None, instance=post)
     if form.is_valid():
         post = form.save(commit=False)
         post.author = request.user
         post.save()
-        return redirect('posts:profile', post.author)
+        return redirect(reverse('posts:profile', args=[post.author.username]))
 
-    post = Post.objects.get(pk=post_id)
     form = PostForm(instance=post)
     context = {
         'form': form,
+        'post': post,
         'is_edit': True
     }
     return render(request, 'posts/create_post.html', context)
