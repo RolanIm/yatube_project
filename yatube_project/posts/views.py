@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.urls import reverse
 
 from .models import Post, Group, User
-from django.core.paginator import Paginator
-from django.contrib.auth.decorators import login_required
 from .forms import PostForm
 
 
@@ -33,7 +33,8 @@ def group_posts(request, slug):
 
 @login_required
 def profile(request, username):
-    all_posts_user = Post.objects.filter(author__username=username).order_by('-pub_date')
+    user_posts = Post.objects.filter(author__username=username)
+    all_posts_user = user_posts.order_by('-pub_date')
     page_obj, paginator = get_page_objects(request, posts=all_posts_user)
     author_obj = User.objects.filter(username=username)[0]
     count_posts = paginator.count

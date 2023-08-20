@@ -9,7 +9,7 @@ User = get_user_model()
 
 class TestPosts(TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         super().setUpClass()
         cls.user = User.objects.create(
             username='test-username',
@@ -26,15 +26,15 @@ class TestPosts(TestCase):
             slug='slug-2',
             description='description-2')
         cls.posts = list()
-        for _ in range(11):
+        for num in range(11):
             cls.posts.append(
-                Post.objects.create(text=f'text-1',
+                Post.objects.create(text=f'text-{num}',
                                     author=cls.user,
                                     group=cls.group)
             )
         cls.post = cls.posts[0]
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.guest_client = Client()
         self.auth_client = Client()
         self.auth_client2 = Client()

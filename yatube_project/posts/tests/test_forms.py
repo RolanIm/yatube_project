@@ -8,7 +8,7 @@ class TestPostsForms(TestPosts):
     def test_correct_create_form(self):
         posts_count = Post.objects.count()
         self.form_data = {
-            'text': 'text-2',
+            'text': 'text-new',
             'group': self.group.pk,
         }
         response = self.auth_client.post(
@@ -21,7 +21,7 @@ class TestPostsForms(TestPosts):
         self.assertTrue(
             Post.objects.filter(
                 author=self.user,
-                text='text-2',
+                text='text-new',
                 group=self.group
             ).exists()
         )

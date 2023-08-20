@@ -2,7 +2,7 @@ from .fixtures import TestPosts
 
 
 class StrModelTest(TestPosts):
-    def test_str_post(self):
+    def test_str_post_and_group(self):
         post = self.post
         group = self.group
         self.assertEqual(post.text, str(post))
