@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 from django.urls import reverse
 
 from .models import Post, Group, User
-from .forms import PostForm
+from .forms import PostForm, CommentForm
 
 
 def index(request):
@@ -48,12 +48,15 @@ def profile(request, username):
 
 
 def post_detail(request, post_id):
+    form = CommentForm()
     post = Post.objects.get(pk=post_id)
     count_posts = Post.objects.filter(author=post.author).count()
     title_text = post.text[:30]
 
     context = {
+        'form': form,
         'post': post,
+        'comments': post.comments.all(),
         'count_posts': count_posts,
         'title_text': title_text,
     }
@@ -105,3 +108,14 @@ def get_page_objects(request, posts):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return page_obj, paginator
+
+
+@login_required
+def add_comment(request, post_id):
+    form = CommentForm(request.POST or None)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.author = request.user
+        comment.post = Post.objects.get(pk=post_id)
+        comment.save()
+    return redirect(reverse('posts:post_id', args=[post_id]))

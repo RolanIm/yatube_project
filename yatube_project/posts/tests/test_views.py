@@ -1,6 +1,5 @@
 from .fixtures import TestPosts
 from django.urls import reverse
-from django import forms
 
 
 class ViewsTestsPosts(TestPosts):
@@ -108,9 +107,13 @@ class ViewsTestsPosts(TestPosts):
             reverse('posts:index'),
             reverse('posts:group_posts', args=[self.group.slug]),
             reverse('posts:profile', args=[self.user]),
+            reverse('posts:post_id', args=[self.posts[-1].id]),
         ]
         for url in urls:
             with self.subTest(url=url):
                 response = self.auth_client.get(url)
-                last_object = response.context['page_obj'][0]
+                if url == '/posts/11/':
+                    last_object = response.context['post']
+                else:
+                    last_object = response.context['page_obj'][0]
                 self.assertTrue(last_object.image)

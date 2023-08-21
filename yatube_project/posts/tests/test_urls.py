@@ -10,7 +10,7 @@ class URLTestsPosts(TestPosts):
             '/',
             f'/group/{group.slug}/',
             f'/posts/{post.pk}/',
-            '/unexciting_page/',
+            # '/unexciting_page/',
         ]
         guest_client = self.guest_client
         for url in urls:

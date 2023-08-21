@@ -33,7 +33,17 @@ class TestPosts(TestCase):
             title='title-2',
             slug='slug-2',
             description='description-2')
+        cls.form_fields = {
+            'text': forms.CharField,
+            'group': forms.ModelChoiceField,
+            'image': forms.ImageField,
+        }
+        cls.redirect_url = reverse(
+            'posts:profile',
+            kwargs={'username': cls.user.username}
+        )
 
+    def setUp(self) -> None:
         small_gif = (
              b'\x47\x49\x46\x38\x39\x61\x02\x00'
              b'\x01\x00\x80\x00\x00\x00\x00\x00'
@@ -42,37 +52,27 @@ class TestPosts(TestCase):
              b'\x02\x00\x01\x00\x00\x02\x02\x0C'
              b'\x0A\x00\x3B'
         )
-        cls.uploaded_img = SimpleUploadedFile(
+        uploaded_img = SimpleUploadedFile(
             name='small.gif',
             content=small_gif,
             content_type='image/gif'
         )
 
-        cls.posts = list()
+        self.posts = list()
         for num in range(11):
-            cls.posts.append(
+            self.posts.append(
                 Post.objects.create(text=f'text-{num}',
-                                    author=cls.user,
-                                    image=cls.uploaded_img,
-                                    group=cls.group)
+                                    author=self.user,
+                                    image=uploaded_img,
+                                    group=self.group)
             )
-        cls.post = cls.posts[0]
-        cls.form_fields = {
-            'text': forms.CharField,
-            'group': forms.ModelChoiceField,
-            'image': forms.ImageField,
-        }
+        self.post = self.posts[0]
 
-    def setUp(self) -> None:
         self.guest_client = Client()
         self.auth_client = Client()
         self.auth_client2 = Client()
         self.auth_client.force_login(self.user)
         self.auth_client2.force_login(self.user2)
-        self.redirect_url = reverse(
-            'posts:profile',
-            kwargs={'username': self.user.username}
-        )
 
     @classmethod
     def tearDownClass(cls) -> None:

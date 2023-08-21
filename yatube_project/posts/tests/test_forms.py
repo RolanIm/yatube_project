@@ -1,5 +1,4 @@
 from django.urls import reverse
-
 from .fixtures import TestPosts
 from ..models import Post
 
@@ -7,14 +6,14 @@ from ..models import Post
 class TestPostsForms(TestPosts):
     def test_correct_create_form(self):
         posts_count = Post.objects.count()
-        self.form_data = {
+        form_data = {
             'text': 'text-new',
             'group': self.group.pk,
-            'image': self.uploaded_img,
+            'image': self.post.image,
         }
         response = self.auth_client.post(
             reverse('posts:post_create'),
-            data=self.form_data,
+            data=form_data,
             follow=True
         )
         self.assertRedirects(response, self.redirect_url)
@@ -29,14 +28,14 @@ class TestPostsForms(TestPosts):
 
     def test_correct_edit_form(self):
         posts_count = Post.objects.count()
-        self.form_data = {
+        form_data = {
             'text': 'text-updated',
             'group': self.group.pk,
-            'image': self.uploaded_img,
+            'image': self.post.image,
         }
         response = self.auth_client.post(
             reverse('posts:post_edit', args=[self.post.id]),
-            data=self.form_data,
+            data=form_data,
             follow=True
         )
         self.assertRedirects(response, self.redirect_url)
