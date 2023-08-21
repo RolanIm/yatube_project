@@ -1,12 +1,20 @@
-from django.test import TestCase, Client
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase, Client, override_settings
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from django.conf import settings
+from django import forms
+
+import shutil
+import tempfile
 
 from ..models import Post, Group
 
 User = get_user_model()
+TEMP_MEDIA_ROOT = tempfile.mktemp(dir=settings.BASE_DIR)
 
 
+@override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
 class TestPosts(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -25,14 +33,35 @@ class TestPosts(TestCase):
             title='title-2',
             slug='slug-2',
             description='description-2')
+
+        small_gif = (
+             b'\x47\x49\x46\x38\x39\x61\x02\x00'
+             b'\x01\x00\x80\x00\x00\x00\x00\x00'
+             b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
+             b'\x00\x00\x00\x2C\x00\x00\x00\x00'
+             b'\x02\x00\x01\x00\x00\x02\x02\x0C'
+             b'\x0A\x00\x3B'
+        )
+        cls.uploaded_img = SimpleUploadedFile(
+            name='small.gif',
+            content=small_gif,
+            content_type='image/gif'
+        )
+
         cls.posts = list()
         for num in range(11):
             cls.posts.append(
                 Post.objects.create(text=f'text-{num}',
                                     author=cls.user,
+                                    image=cls.uploaded_img,
                                     group=cls.group)
             )
         cls.post = cls.posts[0]
+        cls.form_fields = {
+            'text': forms.CharField,
+            'group': forms.ModelChoiceField,
+            'image': forms.ImageField,
+        }
 
     def setUp(self) -> None:
         self.guest_client = Client()
@@ -45,3 +74,7 @@ class TestPosts(TestCase):
             kwargs={'username': self.user.username}
         )
 
+    @classmethod
+    def tearDownClass(cls) -> None:
+        super().tearDownClass()
+        shutil.rmtree(TEMP_MEDIA_ROOT, ignore_errors=True)

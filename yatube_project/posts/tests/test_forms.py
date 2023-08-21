@@ -10,6 +10,7 @@ class TestPostsForms(TestPosts):
         self.form_data = {
             'text': 'text-new',
             'group': self.group.pk,
+            'image': self.uploaded_img,
         }
         response = self.auth_client.post(
             reverse('posts:post_create'),
@@ -22,7 +23,7 @@ class TestPostsForms(TestPosts):
             Post.objects.filter(
                 author=self.user,
                 text='text-new',
-                group=self.group
+                group=self.group,
             ).exists()
         )
 
@@ -31,6 +32,7 @@ class TestPostsForms(TestPosts):
         self.form_data = {
             'text': 'text-updated',
             'group': self.group.pk,
+            'image': self.uploaded_img,
         }
         response = self.auth_client.post(
             reverse('posts:post_edit', args=[self.post.id]),
@@ -43,6 +45,6 @@ class TestPostsForms(TestPosts):
             Post.objects.filter(
                 author=self.user,
                 text='text-updated',
-                group=self.group
+                group=self.group,
             ).exists()
         )

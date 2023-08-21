@@ -72,20 +72,16 @@ class ViewsTestsPosts(TestPosts):
 
     def test_correct_create_post_view_context(self):
         response = self.auth_client.get(reverse('posts:post_create'))
-        form_fields = {
-            'text': forms.CharField,
-            'group': forms.ModelChoiceField,
-        }
-        for field, expected_type in form_fields.items():
+        for field, expected_type in self.form_fields.items():
             with self.subTest(field_name=field):
                 form_field = response.context['form'].fields[field]
                 self.assertIsInstance(form_field, expected_type)
 
-    def test_show_post_on_each_pages(self):
+    def test_show_post_on_each_page(self):
         reverse_urls = [
             reverse('posts:index'),
             reverse('posts:group_posts', args=[self.group.slug]),
-            reverse('posts:profile', args=[self.user.username]),
+            reverse('posts:profile', args=[self.user]),
         ]
         for reverse_url in reverse_urls:
             with self.subTest(reverse_url=reverse_url):
@@ -102,11 +98,19 @@ class ViewsTestsPosts(TestPosts):
 
     def test_correct_update_post_view_context(self):
         response = self.auth_client.get(reverse('posts:post_edit', args=[1]))
-        form_fields = {
-            'text': forms.CharField,
-            'group': forms.ModelChoiceField,
-        }
-        for field, expected_type in form_fields.items():
+        for field, expected_type in self.form_fields.items():
             with self.subTest(field_name=field):
                 form_field = response.context['form'].fields[field]
                 self.assertIsInstance(form_field, expected_type)
+
+    def test_show_image_on_each_page(self):
+        urls = [
+            reverse('posts:index'),
+            reverse('posts:group_posts', args=[self.group.slug]),
+            reverse('posts:profile', args=[self.user]),
+        ]
+        for url in urls:
+            with self.subTest(url=url):
+                response = self.auth_client.get(url)
+                last_object = response.context['page_obj'][0]
+                self.assertTrue(last_object.image)
