@@ -12,7 +12,7 @@
         <img class="card-img my-2" src="{{ im.url }}">
     {% endthumbnail %}
     <p>{{ post.text|truncatewords:30 }}</p>
-    <a href="{% url 'posts:post_id' post.pk %}" class="text-decoration-none">
+    <a href="{% url 'posts:post_detail' post.pk %}" class="text-decoration-none">
         подробная информация
     </a>
     {% if post.group %}

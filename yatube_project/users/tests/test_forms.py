@@ -14,7 +14,7 @@ class TestUsersForms(TestUsers):
             'password1': 'Password1234_!',
             'password2': 'Password1234_!'
         }
-        redirect_url = reverse('posts:index')
+        redirect_url = reverse('posts:post_list')
         response = self.guest_client.post(
             reverse('users:signup'),
             data=form_data,

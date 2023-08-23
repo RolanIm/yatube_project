@@ -5,8 +5,10 @@ class StrModelTest(TestPosts):
     def test_str_post_and_group(self):
         post = self.post
         group = self.group
-        self.assertEqual(post.text, str(post))
+        comment = self.comment
+        self.assertEqual(post.text[:15], str(post))
         self.assertEqual(group.title, str(group))
+        self.assertEqual(comment.text, str(comment))
 
     def test_help_text(self):
         post = self.post

@@ -3,11 +3,40 @@ from django.urls import path
 
 app_name = 'posts'
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('group/<slug>/', views.group_posts, name='group_posts'),
-    path('create/', views.post_create, name='post_create'),
-    path('profile/<str:username>/', views.profile, name='profile'),
-    path('posts/<int:post_id>/', views.post_detail, name='post_id'),
-    path('posts/<int:post_id>/edit', views.post_edit, name='post_edit'),
-    path('posts/<int:post_id>/comment', views.add_comment, name='add_comment'),
+    path(
+        '',
+        views.PostListView.as_view(),
+        name='post_list'
+    ),
+    path(
+        'posts/<int:pk>/',
+        views.PostDetailView.as_view(),
+        name='post_detail'
+    ),
+    path(
+        'create/',
+        views.PostCreateView.as_view(),
+        name='post_create'
+    ),
+    path(
+        'profile/<str:username>/',
+        views.ProfileView.as_view(),
+        name='profile'
+    ),
+    path(
+        'posts/<int:pk>/edit',
+        views.PostUpdateView.as_view(),
+        name='post_edit'
+    ),
+    path(
+        'group/<slug>/',
+        views.GroupListView.as_view(),
+        name='group_posts'
+    ),
+    path(
+        'posts/<int:pk>/comment',
+        views.CommentCreateView.as_view(),
+        name='add_comment'
+
+    ),
 ]

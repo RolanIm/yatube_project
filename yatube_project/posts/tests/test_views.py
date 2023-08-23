@@ -6,8 +6,8 @@ class ViewsTestsPosts(TestPosts):
     def test_reverse_use_correct_templates(self):
         username = self.user.username
         reverse_template = {
-            reverse('posts:index'): 'posts/index.html',
-            reverse('posts:post_create'): 'posts/create_post.html',
+            reverse('posts:post_list'): 'posts/post_list.html',
+            reverse('posts:post_create'): 'posts/post_form.html',
             reverse(
                 'posts:group_posts',
                 kwargs={'slug': self.group.slug}): 'posts/group_list.html',
@@ -15,11 +15,11 @@ class ViewsTestsPosts(TestPosts):
                 'posts:profile',
                 kwargs={'username': username}): 'posts/profile.html',
             reverse(
-                'posts:post_id',
-                kwargs={'post_id': self.post.id}): 'posts/post_detail.html',
+                'posts:post_detail',
+                kwargs={'pk': self.post.id}): 'posts/post_detail.html',
             reverse(
                 'posts:post_edit',
-                kwargs={'post_id': self.post.id}): 'posts/create_post.html',
+                kwargs={'pk': self.post.id}): 'posts/post_form.html',
         }
 
         for reverse_url, expected_template in reverse_template.items():
@@ -28,12 +28,12 @@ class ViewsTestsPosts(TestPosts):
                 self.assertTemplateUsed(response, expected_template)
 
     def test_correct_index_view_context(self):
-        response_1 = self.auth_client.get(reverse('posts:index'))
+        response_1 = self.auth_client.get(reverse('posts:post_list'))
         page_obj = response_1.context['page_obj']
         post_text = page_obj[0].text
         self.assertEqual(post_text, self.posts[-1].text)
         self.assertEqual(len(page_obj), 10)
-        response_2 = self.auth_client.get(reverse('posts:index') + '?page=2')
+        response_2 = self.auth_client.get(reverse('posts:post_list') + '?page=2')
         self.assertEqual(len(response_2.context['page_obj']), 1)
 
     def test_correct_group_posts_view_context(self):
@@ -54,8 +54,8 @@ class ViewsTestsPosts(TestPosts):
             'posts:profile', args=[self.user]
         ))
         author = response_1.context['author_obj']
-        count_posts = response_1.context['count_posts']
         page_obj = response_1.context['page_obj']
+        count_posts = response_1.context['paginator'].count
         self.assertEqual(author, self.user)
         self.assertEqual(count_posts, len(self.posts))
         self.assertEqual(len(page_obj), 10)
@@ -65,7 +65,7 @@ class ViewsTestsPosts(TestPosts):
         self.assertEqual(len(response_2.context['page_obj']), 1)
 
     def test_correct_post_detail_view_context(self):
-        response = self.auth_client.get(reverse('posts:post_id', args=[1]))
+        response = self.auth_client.get(reverse('posts:post_detail', args=[1]))
         post = response.context['post']
         self.assertEqual(post.id, 1)
 
@@ -78,7 +78,7 @@ class ViewsTestsPosts(TestPosts):
 
     def test_show_post_on_each_page(self):
         reverse_urls = [
-            reverse('posts:index'),
+            reverse('posts:post_list'),
             reverse('posts:group_posts', args=[self.group.slug]),
             reverse('posts:profile', args=[self.user]),
         ]
@@ -104,10 +104,10 @@ class ViewsTestsPosts(TestPosts):
 
     def test_show_image_on_each_page(self):
         urls = [
-            reverse('posts:index'),
+            reverse('posts:post_list'),
             reverse('posts:group_posts', args=[self.group.slug]),
             reverse('posts:profile', args=[self.user]),
-            reverse('posts:post_id', args=[self.posts[-1].id]),
+            reverse('posts:post_detail', args=[self.posts[-1].id]),
         ]
         for url in urls:
             with self.subTest(url=url):

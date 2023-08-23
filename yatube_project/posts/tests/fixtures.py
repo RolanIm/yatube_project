@@ -8,7 +8,7 @@ from django import forms
 import shutil
 import tempfile
 
-from ..models import Post, Group
+from ..models import Post, Group, Comment
 
 User = get_user_model()
 TEMP_MEDIA_ROOT = tempfile.mktemp(dir=settings.BASE_DIR)
@@ -67,6 +67,11 @@ class TestPosts(TestCase):
                                     group=self.group)
             )
         self.post = self.posts[0]
+        self.comment = Comment.objects.create(
+            post=self.post,
+            author=self.user,
+            text='comment01'
+        )
 
         self.guest_client = Client()
         self.auth_client = Client()

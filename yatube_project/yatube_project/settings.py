@@ -134,7 +134,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 LOGIN_URL = 'users:login'
-LOGIN_REDIRECT_URL = 'posts:index'
+LOGIN_REDIRECT_URL = 'posts:post_list'
 # LOGOUT_REDIRECT_URL = 'posts:index'
 
 #  подключаем движок filebased.EmailBackend

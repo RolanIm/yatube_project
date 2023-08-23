@@ -5,9 +5,8 @@
 {% block content %}
       <div class="container py-5">
         <h1>Все посты пользователя {{ author_obj.get_full_name }}</h1>
-        <h3>Всего постов: {{ count_posts }} </h3>
+        <h3>Всего постов: {{ paginator.count }} </h3>
         <article>
-          {% include 'posts/includes/paginator.html' %}
           {% include 'posts/includes/forloop_body.html' %}
           {% include 'posts/includes/paginator.html' %}
         </article>
