@@ -1,11 +1,12 @@
 from . import views
 from django.urls import path
+from django.views.decorators.cache import cache_page
 
 app_name = 'posts'
 urlpatterns = [
     path(
         '',
-        views.PostListView.as_view(),
+        cache_page(20)(views.PostListView.as_view()),
         name='post_list'
     ),
     path(

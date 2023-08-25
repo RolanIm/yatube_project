@@ -6,6 +6,7 @@ User = get_user_model()
 
 
 class Group(models.Model):
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     description = models.TextField()
@@ -15,6 +16,7 @@ class Group(models.Model):
 
 
 class Post(models.Model):
+    id = models.AutoField(primary_key=True)
     text = models.TextField(
         verbose_name='Текст поста',
         help_text='Введите текст поста'
@@ -35,7 +37,8 @@ class Post(models.Model):
     )
     pub_date = models.DateTimeField(
         verbose_name='Дата публикации',
-        auto_now_add=True
+        auto_now_add=True,
+        db_index=True
     )
     image = models.ImageField(
         'Image',
@@ -56,6 +59,7 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
+    id = models.AutoField(primary_key=True)
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
