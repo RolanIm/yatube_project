@@ -164,3 +164,4 @@ requirements.txt
 LICENSE
 .mypy_cache
 yatube_project/static/
+yatube_project/media/
