@@ -1,12 +1,13 @@
 from . import views
 from django.urls import path
-from django.views.decorators.cache import cache_page
+# from django.views.decorators.cache import cache_page
 
 app_name = 'posts'
 urlpatterns = [
     path(
         '',
-        cache_page(20)(views.PostListView.as_view()),
+        # cache_page(20)(views.PostListView.as_view()),
+        views.PostListView.as_view(),
         name='post_list'
     ),
     path(
@@ -39,5 +40,10 @@ urlpatterns = [
         views.CommentCreateView.as_view(),
         name='add_comment'
 
+    ),
+    path(
+        'posts/<int:pk>/comment/delete',
+        views.CommentDeleteView.as_view(),
+        name='delete_comment'
     ),
 ]

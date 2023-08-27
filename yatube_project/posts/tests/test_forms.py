@@ -1,6 +1,5 @@
 from django.urls import reverse
 from .fixtures import TestPosts
-from http import HTTPStatus
 from ..models import Post, Comment
 
 
@@ -8,6 +7,7 @@ class TestPostsForms(TestPosts):
     def test_correct_create_post_form(self):
         posts_count = Post.objects.count()
         form_data = {
+            'title': 'title-text',
             'text': 'text-new',
             'group': self.group.pk,
             'image': self.post.image,
@@ -21,6 +21,7 @@ class TestPostsForms(TestPosts):
         self.assertEqual(Post.objects.count(), posts_count + 1)
         self.assertTrue(
             Post.objects.filter(
+                title='title-text',
                 author=self.user,
                 text='text-new',
                 group=self.group,
@@ -30,6 +31,7 @@ class TestPostsForms(TestPosts):
     def test_correct_edit_post_form(self):
         posts_count = Post.objects.count()
         form_data = {
+            'title': 'title-text-updated',
             'text': 'text-updated',
             'group': self.group.pk,
             'image': self.post.image,
@@ -43,6 +45,7 @@ class TestPostsForms(TestPosts):
         self.assertEqual(Post.objects.count(), posts_count)
         self.assertTrue(
             Post.objects.filter(
+                title='title-text-updated',
                 author=self.user,
                 text='text-updated',
                 group=self.group,

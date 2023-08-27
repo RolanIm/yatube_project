@@ -4,10 +4,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views import View
 
-from .models import Post, Group, User
+from .models import Post, Group, User, Comment
 from .forms import CommentForm
 from django.views.generic import (CreateView, UpdateView,
-                                  ListView, DetailView)
+                                  ListView, DetailView, DeleteView)
 
 
 class PostListView(ListView):
@@ -71,7 +71,7 @@ class PostDetailView(DetailView):
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['text', 'group', 'image']
+    fields = ['title', 'text', 'group', 'image']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -92,7 +92,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
-    fields = ['text', 'group', 'image']
+    fields = ['title', 'text', 'group', 'image']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -136,3 +136,17 @@ class CommentCreateView(LoginRequiredMixin, View):
             reverse('posts:post_detail', args=[pk]),
             context={'form': form}
         )
+
+
+class CommentDeleteView(DeleteView):
+    model = Comment
+
+    def get_success_url(self):
+        post = self.object.post
+        return reverse(
+            'posts:post_detail',
+            args=[post.id])
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(author=self.request.user)

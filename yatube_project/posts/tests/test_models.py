@@ -13,8 +13,9 @@ class StrModelTest(TestPosts):
     def test_help_text(self):
         post = self.post
         help_texts = {
-            'text': 'Введите текст поста',
-            'group': 'Выберите группу',
+            'title': 'Enter the title',
+            'text': "Enter text of the posts",
+            'group': 'Choice group',
         }
         for field, expected in help_texts.items():
             with self.subTest(field=field):
@@ -26,10 +27,10 @@ class StrModelTest(TestPosts):
     def test_verbose_name(self):
         post = self.post
         verbose_names = {
-            'text': 'Текст поста',
-            'pub_date': 'Дата публикации',
-            'author': 'Автор',
-            'group': 'Группа'
+            'text': 'Text of the posts',
+            'pub_date': 'Publication date',
+            'author': 'Author',
+            'group': 'Group',
         }
         for field, expected in verbose_names.items():
             with self.subTest(field=field):
