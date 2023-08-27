@@ -1,49 +1,39 @@
 {% extends "base.html" %}
 {% block title %}Технологии{% endblock %}
 {% block content %}
-{% comment %} Колонки с отступом сверху и снизу {% endcomment %}
-<div class="row">
-  <h3>Вот, что я умею</h3>
-  {% comment %}
-    Боковой блок со списком технологий
-    займет всю ширину блока на мобильном
-    и 25% при размерах экрана ≥768px
-  {% endcomment %}
+<div class="py-4 row">
   <aside class="col-12 col-md-3">
     <ul class="list-group list-group-flush">
       <li class="list-group-item">
-        Python
+        Python 3.11 | Django 4.2
       </li>
       <li class="list-group-item">
-        Django
+        HTML/CSS | Bootstrap 5.3
       </li>
       <li class="list-group-item">
         PostgresSQL, SQlite
       </li>
       <li class="list-group-item">
-        GIT
+        Git & GitHub
       </li>
     </ul>
   </aside>
-  {% comment %}
-    Статья
-    займет всю ширину блока на мобильном
-    и 75% при размерах экрана ≥768px
-  {% endcomment %}
   <article class="col-12 col-md-9">
     <p style="text-indent: 25px;">
         <ul>
             <li>
-                <p>Backend часть написана с помощью python и Django</p>
+                <p>Backend part is written with python and Django</p>
             </li>
             <li>
-                <p>Эта страница оформлена с помощью bootstrap и HTML/CSS</p>
+                <p>Frontend part is written with HTML/CSS and bootstrap library</p>
             </li>
             <li>
-                <p>Данные о постах пользователей хранятся в БД SQlite</p>
+                <p>Data are storing with SQLite</p>
             </li>
             <li>
-                <p>Используются технологии git & Github</p>
+                <a href="https://github.com/RolanIm/">
+                    My GitHub with other projects
+                </a>
             </li>
         </ul>
   </article>

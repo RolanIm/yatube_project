@@ -1,17 +1,12 @@
 {% load static %}
-  <nav class="navbar navbar-light navbar-expand-lg" style="background-color: lightskyblue">
-    <div class="container">
-      <a class="navbar-brand" href="{% url 'posts:post_list' %}">
-      <img src="{% static 'img/logo.png' %}" width="40" height="40"
-         class="d-inline-block align-top" alt="">
-      <span style="font-size:28px">
-          <span style="color:red">Ya</span>tube
-      </span>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
-      >
-          <span class="navbar-toggler-icon"></span>
+  <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'posts:post_list' %}">Yatube</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -19,14 +14,14 @@
             <li class="nav-item">
               <a class="nav-link {% if request.resolver_match.view_name == 'about:author' %}active{% endif %}"
                  href="{% url 'about:author' %}">
-                  Об авторе
+                  Author
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link {% if request.resolver_match.view_name == 'about:tech' %}active{% endif %}"
                  href="{% url 'about:tech' %}"
               >
-                  Технологии
+                  Tech
               </a>
             </li>
             {% if user.is_authenticated %}
@@ -34,28 +29,28 @@
                   <a class="nav-link {% if request.resolver_match.view_name == 'posts:post_create' %}active{% endif %}"
                      href="{% url 'posts:post_create' %}"
                   >
-                      Новая запись
+                      Create post
                   </a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link {% if request.resolver_match.view_name == 'users:password_change' %}active{% endif %}"
                      href="{% url 'users:password_change' %}"
                   >
-                      Изменить пароль
+                      Change password
                   </a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link {% if request.resolver_match.view_name == 'users:logout' %}active{% endif %}"
                      href="{% url 'users:logout' %}"
                   >
-                      Выйти
+                      Log Out
                   </a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link {% if request.resolver_match.view_name == 'posts:profile' and user == author_obj %}active{% endif %}"
                      href="{% url 'posts:profile' user.username %}"
                   >
-                    Пользователь: {{ user.username }}
+                    {{ user.username }}
                   </a>
                 <li>
             {% else %}
@@ -63,14 +58,14 @@
                   <a class="nav-link {% if request.resolver_match.view_name == 'users:login' %}active{% endif %}"
                      href="{% url 'users:login' %}"
                   >
-                      Войти
+                      Log In
                   </a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link {% if request.resolver_match.view_name == 'users:signup' %}active{% endif %}"
                      href="{% url 'users:signup' %}"
                   >
-                      Регистрация
+                      Sing Up
                   </a>
                 </li>
             {% endif %}

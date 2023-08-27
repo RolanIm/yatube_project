@@ -1,17 +1,21 @@
 {% extends "base.html" %}
-{% block title %}Об авторе проекта{% endblock %}
+{% block title %}About{% endblock %}
 {% block content %}
 {% load static %}
-    <p>
-        <img src="{% static 'img/me.jpg' %}" alt="">
-    </p>
-    <h4>Hello, my name is Rolan, I like programming and sport!</h4>
-    <p>I have started to learn programming since october 2021.</p>
-    <p>
-    <h5>During free time, I</h5>
-    <ul>
-        <li>Read books</li>
-        <li>Do sports</li>
-        <li>Play chess</li>
-    </ul>
+    <div class="row container py-3">
+        <aside class="col-auto col-md-3">
+            <img style="width: 170px;" src="{% static 'img/me.jpg' %}"
+                class="rounded float-start" alt=""/>
+        </aside>
+        <aside class="col-auto col-md-6">
+            <div class="card">
+              <div class="card-body text-dark">
+                  <h5>About me</h5>
+                  Hello there! My name is Rolan.
+                  I've been studying programming for a year and a half.
+                  In my spare time I learn english and math, play chess and exercise.
+              </div>
+            </div>
+        </aside>
+    </div>
 {% endblock %}

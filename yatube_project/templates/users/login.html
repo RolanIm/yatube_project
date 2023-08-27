@@ -1,17 +1,17 @@
 {% extends "users/card.html" %}
 
-{% block title %}Войти{% endblock %}
+{% block title %}Log In{% endblock %}
 
 {% block card_header %}
-    Войти на сайт
+    Log In on the site
 {% endblock %}
 
 {% block card_body %}
-    {% with button='Войти' %}
+    {% with button='Log In' %}
         {% include 'users/includes/form_user.html' %}
     {% endwith %}
         <a href="{% url 'users:password_reset' %}" class="btn btn-link">
-            Забыли пароль?
+            Forgot password?
         </a>
       </div>
     </form>

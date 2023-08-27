@@ -2,9 +2,9 @@
 
 {% block title %}
     {% if is_edit %}
-        Редактировать пост
+        Change the post
     {% else %}
-        Новый пост
+        A new post
     {% endif %}
 {% endblock %}
 
@@ -15,9 +15,9 @@
         <div class="card">
           <div class="card-header">
             {% if is_edit %}
-                Редактировать пост
+                Change the post
             {% else %}
-                Новый пост
+                A new post
             {% endif %}
           </div>
           <div class="card-body">
@@ -30,11 +30,21 @@
               {% include 'includes/form.html' %}
               <button type="submit" class="btn btn-primary">
                 {% if is_edit %}
-                  Изменить
+                  Change
                 {% else %}
-                  Сохранить
+                  Save
                 {% endif %}
               </button>
+              <a
+                      {% if is_edit %}
+                         href="{% url 'posts:post_detail' post.id %}"
+                      {% else %}
+                         href="{% url 'posts:post_list' %}"
+                      {% endif %}
+                      class="btn btn-secondary"
+              >
+                  Cancel
+              </a>
             </form>
           </div>
         </div>

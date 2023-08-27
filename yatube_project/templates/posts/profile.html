@@ -1,11 +1,17 @@
 {% extends 'base.html' %}
-{% block title %}Профайл пользователя {{ author_obj.get_full_name }}{% endblock %}
+{% block title %}Profile {{ author_obj.get_full_name }}{% endblock %}
 
 {% load static %}
 {% block content %}
       <div class="container py-5">
-        <h1>Все посты пользователя {{ author_obj.get_full_name }}</h1>
-        <h3>Всего постов: {{ paginator.count }} </h3>
+        <h1>All posts of the
+            {% if author_obj.get_full_name %}
+                {{ author_obj.get_full_name }}
+            {% else %}
+                @{{ author_obj.username }}
+            {% endif %}
+        </h1>
+        <h3>In total: {{ paginator.count }} </h3>
         <article>
           {% include 'posts/includes/forloop_body.html' %}
           {% include 'posts/includes/paginator.html' %}

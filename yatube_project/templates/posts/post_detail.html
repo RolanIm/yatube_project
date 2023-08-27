@@ -1,75 +1,114 @@
 {% extends 'base.html' %}
-{% block title %}Пост {{ title_text }}{% endblock %}
+{% block title %}Post {{ title_text }}{% endblock %}
 {% block content %}
 {% load user_filters %}
 {% load static %}
+{% load humanize %}
 {% load thumbnail %}
     <div class="container py-5">
       <div class="row">
         <aside class="col-12 col-md-3">
           <ul class="list-group list-group-flush">
             <li class="list-group-item">
-              Дата публикации: {{ post.pub_date|date:"d M Y" }}
+              Date: {{ post.pub_date|date:"d M Y" }}
             </li>
               {% if not post.group == None %}
                   <li class="list-group-item">
-                    Группа:
+                    Group:
                     <a href="{% url 'posts:group_posts' post.group.slug %}">
                       {{ post.group.title }}
                     </a>
                   </li>
               {% endif %}
               <li class="list-group-item">
-                  Автор: <a href="{% url 'posts:profile' post.author.username %}">{{ post.author.get_full_name }}</a>
+                  Author:
+                  <a href="{% url 'posts:profile' post.author.username %}">
+                      {% if post.author.get_full_name %}
+                        {{ post.author.get_full_name }}
+                      {% else %}
+                        @{{ post.author.username }}
+                      {% endif %}
+                  </a>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center">
-                  Всего постов автора:  <span>{{ count_posts }}</span>
+                  In total author's posts:  <span>{{ count_posts }}</span>
               </li>
-            <li class="list-group-item">
-              <a href="{% url 'posts:profile' post.author.username %}">
-                все посты пользователя
-              </a>
-            </li>
           </ul>
         </aside>
         <article class="col-12 col-md-9">
-          {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
-            <img class="card-img my-2" src="{{ im.url }}">
-          {% endthumbnail %}
-          <p>
-              {{ post.text }}
-          </p>
-          {% if post.author == request.user %}
-            <a class="btn btn-primary" href="{%  url 'posts:post_edit' post.pk %}">
-              редактировать запись
-            </a>
-          {% endif %}
+          <div class="card">
+              {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
+                <img class="card-img my-2" src="{{ im.url }}">
+              {% endthumbnail %}
+            <div class="card-body">
+              <p>
+                  {{ post.text }}
+              </p>
+              {% if post.author == request.user %}
+                <a class="btn btn-primary" href="{%  url 'posts:post_edit' post.pk %}">
+                  Edit an entry
+                </a>
+              {% endif %}
+            </div>
+          </div>
         </article>
       </div>
-    </div>
-    <div class="card my-4">
-      <h5 class="card-header">Добавить комментарий:</h5>
-      <div class="card-body">
-        <form method="post" action="{% url 'posts:add_comment' post.id %}">
-          <div class="form-group mb-2">
-            {% include 'includes/form.html' %}
-          </div>
-          <button type="submit" class="btn btn-primary">Отправить</button>
-        </form>
-      </div>
-    </div>
-    {% for comment in comments %}
-        <div class="media mb-4">
-          <div class="media-body">
-            <h5 class="mt-0">
-              <a href="{% url 'posts:profile' comment.author.username %}">
-                {{ comment.author.username }}
-              </a>
-            </h5>
-            <p>
-             {{ comment.text }}
-            </p>
+      <div class="container py-4">
+        <div class="card my-4">
+          <div class="card-body col-auto">
+            <form method="post" action="{% url 'posts:add_comment' post.id %}">
+              <div class="form-group mb-2">
+                {% include 'includes/form.html' %}
+              </div>
+              <button type="submit" class="btn btn-primary">Send</button>
+            </form>
           </div>
         </div>
-    {% endfor %}
+        {% if comments %}
+            {% for comment in comments %}
+                <br>
+                <div class="card">
+                  <div class="card-body row">
+                    <a href="{% url 'posts:profile' comment.author.username %}"
+                       class="link-dark text-decoration-none">
+                        <aside class="col-auto">
+                            <h6 class="mb-0">
+                                {% if author.first_name %}
+                                    {{ comment.author.first_name }}
+                                {% else %}
+                                    @{{ comment.author.username }}
+                                {% endif %}
+                            </h6>
+                            <small class="text-body-secondary">
+                              {{ comment.created|naturaltime }}
+                            </small>
+                      </aside>
+                    </a>
+                        <aside class="col-12">
+                            {{ comment.text }}
+                        </aside>
+                        <aside class="col-auto">
+                            <small>
+                                {% if user == comment.author %}
+                                    <a href="{% url 'posts:delete_comment' comment.id %}"
+                                    class="link-dark">
+                                    <button type="button"
+                                            class="btn btn-primary btn-sm">
+                                        Delete
+                                    </button>
+                                    </a>
+                                {% endif %}
+                            </small>
+                        </aside>
+                  </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div style="text-align: center">
+                <br>
+                <h6>There are no comments yet.</h6>
+            </div>
+        {% endif %}
+      </div>
+    </div>
 {% endblock %}
