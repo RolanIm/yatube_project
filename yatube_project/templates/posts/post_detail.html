@@ -41,14 +41,28 @@
                 <img class="card-img my-2" src="{{ im.url }}">
               {% endthumbnail %}
             <div class="card-body">
-              <p>
+              {% if post.title %}
+                  <h5 class="card-title text-dark">
+                      {{ post.title }}
+                  </h5>
+              {% endif %}
+              <p class="card-text">
                   {{ post.text }}
               </p>
-              {% if post.author == request.user %}
-                <a class="btn btn-primary" href="{%  url 'posts:post_edit' post.pk %}">
-                  Edit an entry
-                </a>
-              {% endif %}
+              <div class="row">
+                  {% if post.author == request.user %}
+                    <div class="col-auto">
+                      <a class="btn btn-primary" href="{% url 'posts:post_edit' post.pk %}">
+                        Edit an entry
+                      </a>
+                    </div>
+                    <div class="col-auto">
+                      <a class="btn btn-primary" href="{% url 'posts:post_delete' post.pk %}">
+                          Delete
+                      </a>
+                    </div>
+                  {% endif %}
+              </div>
             </div>
           </div>
         </article>

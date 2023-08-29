@@ -1,7 +1,7 @@
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.core.cache import cache
 
@@ -22,7 +22,7 @@ class PostListView(ListView):
 
         cache_key = f'pagination_cache_{page_number}_{query_params}'
         result = cache.get(cache_key)
-        if result:
+        if result and Post.objects.count() == len(result):
             return result
         result = super().get_queryset()
         cache.set(cache_key, result)
@@ -136,6 +136,17 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
             args=[self.request.user.username]
         )
         return success_url
+
+
+class PostDeleteView(LoginRequiredMixin, DeleteView):
+    model = Post
+    success_url = reverse_lazy('posts:post_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        post = get_object_or_404(Post, pk=self.kwargs['pk'])
+        context['post'] = post
+        return context
 
 
 class CommentCreateView(LoginRequiredMixin, View):

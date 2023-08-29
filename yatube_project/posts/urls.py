@@ -29,6 +29,11 @@ urlpatterns = [
         name='post_edit'
     ),
     path(
+        'posts/<int:pk>/delete',
+        views.PostDeleteView.as_view(),
+        name='post_delete'
+    ),
+    path(
         'group/<slug>/',
         views.GroupListView.as_view(),
         name='group_posts'
