@@ -20,7 +20,6 @@ dotenv_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
 
-# UPDATE secret key
 SECRET_KEY = os.environ['SECRET_KEY']
 
 DEBUG = os.environ['DEBUG']
@@ -154,9 +153,6 @@ LOGIN_REDIRECT_URL = 'posts:post_list'
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 # указываем директорию, в которую будут складываться файлы писем
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
-
-# CSRF error view function
-# CSRF_FAILURE_VIEW = 'core.views.csrf_failure'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

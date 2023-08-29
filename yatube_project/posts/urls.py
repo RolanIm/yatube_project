@@ -1,12 +1,10 @@
 from . import views
 from django.urls import path
-# from django.views.decorators.cache import cache_page
 
 app_name = 'posts'
 urlpatterns = [
     path(
         '',
-        # cache_page(20)(views.PostListView.as_view()),
         views.PostListView.as_view(),
         name='post_list'
     ),
@@ -45,5 +43,20 @@ urlpatterns = [
         'posts/<int:pk>/comment/delete',
         views.CommentDeleteView.as_view(),
         name='delete_comment'
+    ),
+    path(
+        'follow/',
+        views.FollowListView.as_view(),
+        name='follow_list'
+    ),
+    path(
+        'profile/<str:username>/follow/',
+        views.ProfileFollowView.as_view(),
+        name='profile_follow'
+    ),
+    path(
+        'profile/<str:username>/unfollow/',
+        views.ProfileUnfollowView.as_view(),
+        name="profile_unfollow"
     ),
 ]

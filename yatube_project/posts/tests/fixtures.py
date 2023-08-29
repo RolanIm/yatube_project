@@ -8,7 +8,7 @@ from django import forms
 import shutil
 import tempfile
 
-from ..models import Post, Group, Comment
+from ..models import Post, Group, Comment, Follow
 
 User = get_user_model()
 TEMP_MEDIA_ROOT = tempfile.mktemp(dir=settings.BASE_DIR)
@@ -16,6 +16,7 @@ TEMP_MEDIA_ROOT = tempfile.mktemp(dir=settings.BASE_DIR)
 
 @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
 class TestPosts(TestCase):
+
     @classmethod
     def setUpClass(cls) -> None:
         super().setUpClass()
@@ -33,6 +34,10 @@ class TestPosts(TestCase):
             title='title-2',
             slug='slug-2',
             description='description-2')
+        cls.follow = Follow.objects.create(
+            user=cls.user,
+            author=cls.user2
+        )
         cls.form_fields = {
             'text': forms.CharField,
             'group': forms.ModelChoiceField,
@@ -45,12 +50,12 @@ class TestPosts(TestCase):
 
     def setUp(self) -> None:
         small_gif = (
-             b'\x47\x49\x46\x38\x39\x61\x02\x00'
-             b'\x01\x00\x80\x00\x00\x00\x00\x00'
-             b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
-             b'\x00\x00\x00\x2C\x00\x00\x00\x00'
-             b'\x02\x00\x01\x00\x00\x02\x02\x0C'
-             b'\x0A\x00\x3B'
+            b'\x47\x49\x46\x38\x39\x61\x02\x00'
+            b'\x01\x00\x80\x00\x00\x00\x00\x00'
+            b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
+            b'\x00\x00\x00\x2C\x00\x00\x00\x00'
+            b'\x02\x00\x01\x00\x00\x02\x02\x0C'
+            b'\x0A\x00\x3B'
         )
         uploaded_img = SimpleUploadedFile(
             name='small.gif',
@@ -67,6 +72,10 @@ class TestPosts(TestCase):
                                     group=self.group)
             )
         self.post = self.posts[0]
+        self.other_post = Post.objects.create(text=f'text-other',
+                                              author=self.user2,
+                                              image=uploaded_img,
+                                              group=self.other_group)
         self.comment = Comment.objects.create(
             post=self.post,
             author=self.user,

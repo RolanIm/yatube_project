@@ -1,18 +1,36 @@
 {% extends 'base.html' %}
-{% block title %}Profile {{ author_obj.get_full_name }}{% endblock %}
+{% block title %}Profile | {{ author_obj.get_full_name }}{% endblock %}
 
 {% load static %}
 {% block content %}
       <div class="container py-5">
-        <h1>All posts of the
+        <h1>Profile |
             {% if author_obj.get_full_name %}
                 {{ author_obj.get_full_name }}
             {% else %}
                 @{{ author_obj.username }}
             {% endif %}
         </h1>
-        <h3>In total: {{ paginator.count }} </h3>
+        <h3>Number of all posts: {{ paginator.count }} </h3>
+        {% if user.is_authenticated %}
+          {% if following %}
+            <a
+              class="btn btn-outline-secondary btn-sm"
+              href="{% url 'posts:profile_unfollow' author_obj.username %}" role="button"
+            >
+              Unfollow
+            </a>
+          {% else %}
+              <a
+                class="btn btn-outline-primary btn-sm"
+                href="{% url 'posts:profile_follow' author_obj.username %}" role="button"
+              >
+                Follow
+              </a>
+          {% endif %}
+        {% endif %}
         <article>
+          <br>
           {% include 'posts/includes/forloop_body.html' %}
           {% include 'posts/includes/paginator.html' %}
         </article>

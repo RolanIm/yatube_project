@@ -1,0 +1,22 @@
+{% if user.is_authenticated %}
+  <div class="row my-3">
+    <ul class="nav nav-tabs">
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link {% if request.resolver_match.view_name == 'posts:post_list' %}active{% endif %}"
+          href="{% url 'posts:post_list' %}"
+        >
+          All authors
+        </a>
+      </li>
+      <li class="nav-item">
+        <a 
+           class="nav-link {% if request.resolver_match.view_name == 'posts:follow_list' %}active{% endif %}"
+           href="{% url 'posts:follow_list' %}"
+        >
+          Favorite authors
+        </a>
+      </li>
+    </ul>
+  </div>
+{% endif %}

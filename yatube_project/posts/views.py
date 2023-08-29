@@ -3,8 +3,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views import View
+from django.core.cache import cache
 
-from .models import Post, Group, User, Comment
+from .models import Post, Group, User, Comment, Follow
 from .forms import CommentForm
 from django.views.generic import (CreateView, UpdateView,
                                   ListView, DetailView, DeleteView)
@@ -14,6 +15,18 @@ class PostListView(ListView):
     model = Post
     paginate_by = 10
     template_name = 'posts/post_list.html'
+
+    def get_queryset(self):
+        page_number = int(self.request.GET.get('page', 1))
+        query_params = self.request.GET.get('filter', '')
+
+        cache_key = f'pagination_cache_{page_number}_{query_params}'
+        result = cache.get(cache_key)
+        if result:
+            return result
+        result = super().get_queryset()
+        cache.set(cache_key, result)
+        return result
 
 
 class GroupListView(ListView):
@@ -36,6 +49,10 @@ class ProfileView(LoginRequiredMixin, ListView):
     paginate_by = 10
     template_name = 'posts/profile.html'
 
+    def __init__(self):
+        self.user = None
+        super().__init__()
+
     def get_queryset(self):
         self.user = get_object_or_404(User, username=self.kwargs['username'])
         user_posts = Post.objects.filter(author__username=self.user.username)
@@ -43,7 +60,11 @@ class ProfileView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        following = (self.request.user != self.user and
+                     Follow.objects.filter(
+                         user=self.request.user, author=self.user).exists())
         context['author_obj'] = self.user
+        context['following'] = following
         return context
 
 
@@ -138,7 +159,7 @@ class CommentCreateView(LoginRequiredMixin, View):
         )
 
 
-class CommentDeleteView(DeleteView):
+class CommentDeleteView(LoginRequiredMixin, DeleteView):
     model = Comment
 
     def get_success_url(self):
@@ -150,3 +171,45 @@ class CommentDeleteView(DeleteView):
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.filter(author=self.request.user)
+
+
+class FollowListView(LoginRequiredMixin, ListView):
+    model = Post
+    paginate_by = 10
+    template_name = 'posts/follow_post_list.html'
+
+    def get_queryset(self):
+        posts = Post.objects.filter(author__following__user=self.request.user)
+        return posts.order_by('-pub_date')
+
+
+class ProfileFollowView(LoginRequiredMixin, View):
+
+    @staticmethod
+    def get(request, username):
+        author = get_object_or_404(User, username=username)
+        if (author != request.user
+                and not Follow.objects.filter(user=request.user,
+                                              author=author).exists()):
+            Follow.objects.create(
+                user=request.user,
+                author=author,
+            )
+            return redirect('posts:profile', username=username)
+        return HttpResponseForbidden()
+
+
+class ProfileUnfollowView(LoginRequiredMixin, View):
+
+    @staticmethod
+    def get(request, username):
+        author = get_object_or_404(User, username=username)
+        if (author != request.user
+                and Follow.objects.filter(user=request.user,
+                                          author=author).exists()):
+            get_object_or_404(
+                Follow,
+                user=request.user,
+                author__username=username).delete()
+            return redirect('posts:profile', username=username)
+        return HttpResponseForbidden()

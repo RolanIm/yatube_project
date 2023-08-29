@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title %}Latest updates{% endblock %}
+{% block title %}Posts of your favorites authors{% endblock %}
 
 {% block content %}
   <div class="container py-5">
-    <h1>Latest updates</h1>
+    <h1>Posts of your favorites authors</h1>
     {% include 'posts/includes/switcher.html' %}
     {% include 'posts/includes/forloop_body.html' %}
     {% include 'posts/includes/paginator.html' %}

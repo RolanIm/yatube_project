@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from .fixtures import TestPosts
+from time import sleep
 
 
 class URLTestsPosts(TestPosts):
@@ -26,6 +27,7 @@ class URLTestsPosts(TestPosts):
             f'/profile/{self.user.username}/',
             f'/posts/{post.pk}/edit',
             '/create/',
+            '/follow/',
         ]
         guest_client = self.guest_client
         auth_client = self.auth_client
@@ -54,6 +56,7 @@ class URLTestsPosts(TestPosts):
             f'/posts/{post.pk}/': 'posts/post_detail.html',
             '/create/': 'posts/post_form.html',
             f'/posts/{post.pk}/edit': 'posts/post_form.html',
+            f'/follow/': 'posts/follow_post_list.html',
         }
         auth_client = self.auth_client
         for url, template in urls_and_templates.items():

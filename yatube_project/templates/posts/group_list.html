@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title %}Posts of the group {{group.title}} | Yatube{% endblock %}
+{% block title %}Posts of the group #{{group.title}} | Yatube{% endblock %}
 
 {% block content %}
   <div class="container py-5">
-      <h1>{{ group.title }}</h1>
+      <h1>#{{ group.title }}</h1>
       <p>{{ group.description }}</p>
       {% include 'posts/includes/forloop_body.html' %}
       {% include 'posts/includes/paginator.html' %}

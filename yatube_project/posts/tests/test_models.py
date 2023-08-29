@@ -6,15 +6,18 @@ class StrModelTest(TestPosts):
         post = self.post
         group = self.group
         comment = self.comment
+        follow = self.follow
+        follow_str = f'Follower: {self.user}, author: {self.user2}'
         self.assertEqual(post.text[:15], str(post))
         self.assertEqual(group.title, str(group))
         self.assertEqual(comment.text, str(comment))
+        self.assertEqual(follow_str, str(follow))
 
     def test_help_text(self):
         post = self.post
         help_texts = {
             'title': 'Enter the title',
-            'text': "Enter text of the posts",
+            'text': "Enter text of the post",
             'group': 'Choice group',
         }
         for field, expected in help_texts.items():
@@ -27,7 +30,7 @@ class StrModelTest(TestPosts):
     def test_verbose_name(self):
         post = self.post
         verbose_names = {
-            'text': 'Text of the posts',
+            'text': 'Text of the post',
             'pub_date': 'Publication date',
             'author': 'Author',
             'group': 'Group',
