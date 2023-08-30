@@ -10,8 +10,8 @@
 ## Features
 
 - Commenting on other people's posts
-- Adding entries to Notes
-- The ability to like other people's posts
+- Adding photos to your posts
+- Ability to subscribe for other people
 
 ---
 ## Installation
@@ -25,6 +25,11 @@
   - for Unix/macOS: `source venv/bin/activate`
 - Install dependencies from the file requirements.txt: 
   - `pip install -r requirements.txt`
+- Go to the yatube_project directory:
+  - `cd yatube_project/`
+- Make migrations
+	- `python manage.py makemigrations`
+	- `python manage.py migrate`
 - Run the manage.py file:
   - `python manage.py runserver`
 - Go to the site using the link http://127.0.0.1:8000/
