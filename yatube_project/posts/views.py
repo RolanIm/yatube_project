@@ -34,6 +34,10 @@ class GroupListView(ListView):
     paginate_by = 10
     template_name = 'posts/group_list.html'
 
+    def __init__(self):
+        self.group = None
+        super().__init__()
+
     def get_queryset(self):
         self.group = get_object_or_404(Group, slug=self.kwargs['slug'])
         return Post.objects.filter(group=self.group).order_by('-pub_date')

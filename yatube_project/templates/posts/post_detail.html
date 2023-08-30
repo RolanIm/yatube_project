@@ -38,7 +38,7 @@
         <article class="col-12 col-md-9">
           <div class="card">
               {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
-                <img class="card-img my-2" src="{{ im.url }}">
+                <img class="card-img my-2" src="{{ im.url }}" alt="">
               {% endthumbnail %}
             <div class="card-body">
               {% if post.title %}
@@ -87,8 +87,8 @@
                        class="link-dark text-decoration-none">
                         <aside class="col-auto">
                             <h6 class="mb-0">
-                                {% if author.first_name %}
-                                    {{ comment.author.first_name }}
+                                {% if author.get_full_name %}
+                                    {{ comment.author.get_full_name }}
                                 {% else %}
                                     @{{ comment.author.username }}
                                 {% endif %}

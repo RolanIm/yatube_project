@@ -10,7 +10,7 @@
           <div class="card mx-auto" style="width: 35em;">
             <h4 class="text-dark">Are you sure you want to delete this post?</h4>
             {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
-                <img class="card-img my-2" src="{{ im.url }}">
+                <img class="card-img my-2" src="{{ im.url }}" alt="">
             {% endthumbnail %}
             <div class="card-body">
               {% if post.title %}
