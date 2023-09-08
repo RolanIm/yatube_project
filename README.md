@@ -19,7 +19,7 @@
 ---
 ## Tech
 
-- [HTML/CSS JS](https://developer.mozilla.org)
+- [HTML/CSS](https://developer.mozilla.org)
 - [Bootstrap 5.3](https://getbootstrap.com/)
 - [Python 3.11](https://www.python.org/)
 - [Django 4.2](https://www.djangoproject.com/)
