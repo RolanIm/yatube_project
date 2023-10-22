@@ -30,7 +30,7 @@
 Clone the repository to your computer:
 
 ```
-git clone https://github.com/RolanIm/RentCars.git
+git clone https://github.com/RolanIm/yatube_project.git
 ```
 
 Install and create the virtual environment:
